@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="top">
+    <h1 style="display:inline;"}><a href="{{ url_for('blog') }}">Main Blog Page</a></h1>
+    <h1 style="display:inline;"><a href="{{ url_for('newpost') }}">Add a Blog Entry</a></h1>
+</div>
+        <h1>{{blog_post.title}}</h1>
+        <hr />
+        <p>{{blog_post.body}}</p>
+{% endblock %}
