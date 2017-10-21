@@ -1,0 +1,16 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+    <main class="container">
+        <div>
+            {% for blog in blogs %}
+            <p>This is user post!!</p>
+            <h2><a href="/blog?id={{blog.id}}"></a>{{ blog.title }}</h2>
+            <p>{{ blog.body }}</p>
+            {% endfor %}
+
+            <hr/>
+        </div>
+    </main>
+{% endblock %}

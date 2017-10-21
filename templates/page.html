@@ -1,11 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="top">
-    <h1 style="display:inline;"}><a href="{{ url_for('blog') }}">Main Blog Page</a></h1>
-    <h1 style="display:inline;"><a href="{{ url_for('newpost') }}">Add a Blog Entry</a></h1>
-</div>
-        <h1>{{blog_post.title}}</h1>
-        <hr />
-        <p>{{blog_post.body}}</p>
+    <main class="container">
+        <div>
+<h1>blog posts</h1>
+
+{% if blogs|length == 0 %}
+   <p>No blogs yet</p>
+ {% else %}
+
+
+    {% for blog in blogs %}
+    <p>Poop</p>
+        <h1><a href="/blog?id={{blog.id}}">{{ blog.title }}</a></h1>
+
+        <h2 class="blog-post-content">{{ blog.body }}</h2>
+        <h3>Written by:</h3>
+         <h2><a href="{{ url_for('blog', user=blog.owner.id )}}" class="author">{{ blog.owner.username }}</a></h2>
+
+          <br>
+     <hr/>
+     {% endfor %}
+     <hr/>
+    
+{% endif %}
+
+    </main>
 {% endblock %}
