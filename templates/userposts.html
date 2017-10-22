@@ -4,11 +4,13 @@
 {% block content %}
     <main class="container">
         <div>
-            {% for blog in blogs %}
-            <p>This is user post!!</p>
-            <h2><a href="/blog?id={{blog.id}}"></a>{{ blog.title }}</h2>
-            <p>{{ blog.body }}</p>
-            {% endfor %}
+           
+            <p>blog posts!</p>
+
+            <h2>{{ blogs.title }}</h2>
+            <p>{{ blogs.body }}</p>
+            <p>Written by <a href="/blog?user={{blogs.owner.id}}">{{ blogs.owner.username }}</a> </p>
+            
 
             <hr/>
         </div>

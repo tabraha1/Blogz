@@ -115,8 +115,8 @@ def newpost():
 def blog():
     if request.args.get('id'):
         user_id = request.args.get('id')
-        blog = Blog.query.filter_by(id=user_id).first()
-        return render_template('userposts.html', blog=blog)
+        blogs = Blog.query.filter_by(id=user_id).first()
+        return render_template('userposts.html', blogs=blogs)
     elif request.args.get('user'):
         user_id = request.args.get('user')
         user = User.query.filter_by(id=user_id).first()
