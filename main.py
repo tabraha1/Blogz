@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, session
+from flask import Flask, request, render_template, redirect, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -53,35 +53,34 @@ def login():
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
         if user and user.password == password:
-            #'session'/remember user has logged in
             session['username'] = username
             return redirect('/newpost')
-        else:
-            # if username is stored in db and password incorrect:
-            # redirect to login with flash error: 'password incorrect'
-            # if username is not stored in db:
-            # redirect to login with flash error: 'username does not exist'
-            return '<h1>Error</h1>'
+        elif user and user.password != password:
+            flash('Incorrect password', 'error')
+        
+        elif not user:
+            flash('Username does not exist. Please register.', 'error')
+            
     return render_template('login.html') 
 
 @app.route('/signup', methods=['POST', 'GET'])
 def signup():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        verify = request.form['verify']
-        #Validate data--use code from 'User Signup'
-        existing_user = User.query.filter_by(username=username).first()
-        if not existing_user:
-            new_user = User(username, password)
-            db.session.add(new_user)
-            db.session.commit()
-            session['username'] = new_user.username
-            return redirect('/newpost')
+        if valid_post(request.form['username']) and valid_post(request.form['password']):
+            username = request.form['username']
+            password = request.form['password']
+            verify = request.form['verify']
+            existing_user = User.query.filter_by(username=username).first()
+            if existing_user in session:
+                flash('You are already logged in', 'error')
+            elif not existing_user:
+                new_user = User(username, password)
+                db.session.add(new_user)
+                db.session.commit()
+                session['username'] = new_user.username
+                return redirect('/newpost')
         else:
-            #Return reponse:
-            return '<h1>Duplicate user</h1>' 
-            # error validation from 'User signup'
+            flash('Not a valid username or password', 'error')
     return render_template('signup.html')
 
 @app.route('/logout')
@@ -102,14 +101,11 @@ def newpost():
             db.session.add(new_post)
             db.session.commit()
 
-            #return redirect(url_for('blog', id=new_post.id))
-            #blog_id = new_post.id
             return redirect('/blog?id={0}'.format(new_post.id))
         else:
-            error_msg = "Don't leave blank"
-            return render_template('newpost.html', error_msg=error_msg)
-    else:
-        return render_template('newpost.html') 
+            flash('Either title or post is not valid. Please try again.', 'error')
+    
+    return render_template('newpost.html') 
 
 @app.route('/blog', methods=['GET'])
 def blog():

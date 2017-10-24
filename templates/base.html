@@ -3,34 +3,58 @@
     <head>
         <title>Blog</title>
         <style>
-            .heading: {text-align: center; display: block; }
-            .blog-post: {display: block;}
-            .error: {color:red}
-            .top h2:first-child: {margin: 0 10px;}
-            ul, li: { style="display:inline;" }
+            .error {color:red}
+            #nav {
+                width: 100%;
+                float: left;
+                margin: 0 0 3em 0;
+                padding: 0;
+                list-style: none;
+                background-color: #f2f2f2;
+                border-bottom: 1px solid #ccc; 
+                border-top: 1px solid #ccc; }
+            #nav li {
+                float: left;
+                list-style: none }
+            #nav li a {
+                display: block;
+                padding: 8px 15px;
+                text-decoration: none;
+                font-weight: bold;
+                color: #069;
+                border-right: 1px solid #ccc; }
+            #nav li a:hover {
+                color: #c00;
+                background-color: #fff; }
+            body{ 
+                margin: 20px;
+                background: #eeeeee;
+                font-size: small;
+                font-family: Tahoma;
+                text-align: left;
+}
         </style>
         </head>
     <body>
-                    <nav>
-                        <ul id="user-account">
-                            <li><a href="/login">login</a>
-                            </li>
-                            <li>
-                                <a href="logout">logout</a>
-                            </li>
-                        </ul>
-                        <ul>
-                            <li>
-                                <a href="/">Home</a>
-                            </li>
-                            <li>
-                                <a href="/blog">all posts</a>
-                            </li>
-                            <li>
-                                <a href="/newpost">new post</a>
-                            </li>
-                        </ul>
-                    </nav>
+        <div>
+            <nav id="nav">
+                <ul>
+                    <li><a href="/">home</a></li>
+                    <li><a href="/login">login</a></li>
+                    <li><a href="logout">logout</a></li>
+                    <li><a href="/newpost">new post</a></li>
+                    <li><a href="/blog">all posts</a></li>
+                </ul>
+            </nav>
+        </div>
+
+    {% with messages = get_flashed_messages(with_categories=True) %}
+
+        {% for category, message in messages %}
+        <p class="{{category}}">{{message}}</p>
+        {% endfor %}
+ 
+    {% endwith %}
 
         {% block content %}
         {% endblock %}
